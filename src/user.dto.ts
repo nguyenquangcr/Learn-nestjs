@@ -9,6 +9,7 @@ export class UserDto extends BaseDto {
 
   firstName: string;
   lastName: string;
+
   @Expose()
   @Transform(({ obj }) => obj.firstName + ' ' + obj.lastName)
   fullName: string;
