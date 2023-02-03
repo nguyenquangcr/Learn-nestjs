@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { DataModule } from 'src/Data/data.module';
 import { storeConfig } from 'src/store/store.config';
 import { StoreService } from 'src/store/store.service';
 import { UsersMockService } from './users-mock.service';
@@ -12,12 +13,10 @@ function createStoreService(value): StoreService {
 }
 
 @Module({
+  imports: [DataModule.register({ dirName: 'store', fileName: 'user.json' })],
   controllers: [UsersController],
   providers: [
-    {
-      provide: 'USER_SERVICE_QUANG',
-      useClass: UserService,
-    },
+    UserService,
     // vi du useClass
     // {
     //   provide: UserService,

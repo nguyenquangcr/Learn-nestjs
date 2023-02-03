@@ -29,6 +29,7 @@ export class UsersController {
   constructor(
     @Inject('STORE_CONFIG') private readonly storeConfig: storeConfig,
     @Inject('STORE_SERVICE') private readonly storeService: StoreService,
+    private userService: UserService,
   ) {
     console.log('storeConfig', this.storeConfig);
   }
@@ -47,7 +48,8 @@ export class UsersController {
   // @UsePipes(new ValidationPipe())
   @Post()
   createUser(@Body() user: UserDto): any {
-    this.storeService.save(user);
+    this.userService.createUser(user);
+    // this.storeService.save(user);
     // const userService = this.moduleRef.get('USER_SERVICE_QUANG');
     // return plainToInstance(UserDto, this.userService.createUser(user));
   }
