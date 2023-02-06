@@ -10,6 +10,7 @@ export class DataService {
     }
   }
   save(data: any): void {
+    console.log('data:', data);
     fs.appendFileSync(
       `${this.dataConfig.dirName}/${this.dataConfig.fileName}`,
       JSON.stringify(data),
