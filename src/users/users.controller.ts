@@ -11,8 +11,9 @@ import {
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { plainToInstance } from 'class-transformer';
+import { LoggerService } from 'src/logger/logger.service';
 import { storeConfig } from 'src/store/store.config';
-import { StoreService } from 'src/store/store.service';
+// import { StoreService } from 'src/store/store.service';
 import { UserDto } from 'src/user.dto';
 import { UserService } from './users.service';
 
@@ -27,17 +28,19 @@ export class UsersController {
   //   @Inject('USER_SERVICE_QUANG') private readonly userService: UserService,
   // ) {}
   constructor(
-    @Inject('STORE_CONFIG') private readonly storeConfig: storeConfig,
-    @Inject('STORE_SERVICE') private readonly storeService: StoreService,
-    private userService: UserService,
+    private readonly userService: UserService,
+    private readonly logger: LoggerService,
   ) {
-    console.log('storeConfig', this.storeConfig);
+    console.log('userService.getlog()', userService.getlog());
+    console.log('logger', logger);
+
+    console.log('chay vao day', logger == userService.getlog());
   }
 
-  @Get()
-  getAllUsers() {
-    return [{ name: 'Giang', age: 18 }];
-  }
+  // @Get()
+  // getAllUsers() {
+  //   return [{ name: 'Giang', age: 18 }];
+  // }
 
   @Get(':id')
   getUserById(@Param('id', ParseIntPipe) id: number) {
@@ -48,9 +51,11 @@ export class UsersController {
   // @UsePipes(new ValidationPipe())
   @Post()
   createUser(@Body() user: UserDto): any {
-    this.userService.createUser(user);
-    // this.storeService.save(user);
-    // const userService = this.moduleRef.get('USER_SERVICE_QUANG');
-    // return plainToInstance(UserDto, this.userService.createUser(user));
+    return [this.logger.log(), this.userService.getlog().log()];
+  }
+
+  @Get()
+  test1() {
+    return this.logger.log();
   }
 }

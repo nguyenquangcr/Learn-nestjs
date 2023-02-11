@@ -1,16 +1,19 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { DataConfig } from './data.module';
+import { Inject, Optional } from '@nestjs/common';
+import { STORE_CONFIG_TOKEN } from './data.module';
 import * as fs from 'fs';
+import { DataConfig } from './data.config';
 
-@Injectable()
 export class DataService {
-  constructor(@Inject('DATA_CONFIG') private readonly dataConfig: DataConfig) {
-    if (!fs.existsSync(this.dataConfig.dirName)) {
-      fs.mkdirSync(this.dataConfig.dirName);
+  constructor(
+    @Optional()
+    @Inject(STORE_CONFIG_TOKEN)
+    private readonly dataConfig: DataConfig,
+  ) {
+    if (dataConfig && !fs.existsSync(dataConfig.dirName)) {
+      fs.mkdirSync(dataConfig.dirName);
     }
   }
   save(data: any): void {
-    console.log('data:', data);
     fs.appendFileSync(
       `${this.dataConfig.dirName}/${this.dataConfig.fileName}`,
       JSON.stringify(data),

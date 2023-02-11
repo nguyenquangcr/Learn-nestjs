@@ -1,24 +1,60 @@
 import { DynamicModule, Module } from '@nestjs/common';
+import { DataConfig, DataFeatureConfig, DataRootConfig } from './data.config';
 import { DataService } from './data.service';
 
-export interface DataConfig {
-  dirName: string;
-  fileName: string;
-}
+let rootDataConfig: DataConfig;
+export const STORE_CONFIG_TOKEN = 'DATA_CONFIG';
+const DEFAULT_STORE_DIRNAME = 'store';
+const DEFAULT_FILE_NAME = 'data.json';
+
+@Module({
+  providers: [DataService],
+  exports: [DataService],
+})
+export class RootDataModule {}
 
 @Module({})
 export class DataModule {
-  static register(config: DataConfig): DynamicModule {
+  static forRoot(config?: DataRootConfig): DynamicModule {
+    rootDataConfig = DataModule.createConfig(config);
     return {
-      module: DataModule,
+      module: RootDataModule,
       providers: [
-        DataService,
         {
-          provide: 'DATA_CONFIG',
-          useValue: config,
+          provide: STORE_CONFIG_TOKEN,
+          useValue: rootDataConfig,
         },
       ],
-      exports: [DataService],
     };
+  }
+
+  static forFeature(config: DataFeatureConfig): DynamicModule {
+    const token = 'DATA_SERVICE' + config.fileName;
+    return {
+      module: DataModule,
+      imports: [RootDataModule],
+      providers: [
+        {
+          provide: token,
+          useFactory: () => {
+            const featureStoreConfig = DataModule.createConfig({
+              ...rootDataConfig,
+              ...config,
+            });
+            return new DataService(featureStoreConfig);
+          },
+        },
+      ],
+      exports: [token],
+    };
+  }
+
+  private static createConfig(config: DataConfig): DataConfig {
+    const defaultConfig: DataConfig = {
+      dirName: DEFAULT_STORE_DIRNAME,
+      fileName: DEFAULT_FILE_NAME,
+    };
+
+    return Object.assign(defaultConfig, config);
   }
 }

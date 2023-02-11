@@ -7,7 +7,7 @@ import { UsersModule } from './users/users.module';
 import { UserService } from './users/users.service';
 
 @Module({
-  imports: [UsersModule, PostsModule],
+  imports: [UsersModule, PostsModule, DataModule.forRoot()],
   controllers: [],
   providers: [],
 })
