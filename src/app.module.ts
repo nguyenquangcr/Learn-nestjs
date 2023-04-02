@@ -4,9 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BooksEntity } from './Books/books.entity';
 import { BooksModule } from './Books/books.module';
-import { DataModule } from './Data/data.module';
-import { PostsModule } from './posts/posts.module';
-import { UsersModule } from './users/users.module';
+import { MedicineEntity } from './Medicine/medicine.entity';
+import { MedicineModule } from './Medicine/medicinemodule';
 
 @Module({
   imports: [
@@ -20,12 +19,13 @@ import { UsersModule } from './users/users.module';
       username: 'root',
       password: '123456789',
       database: 'test',
-      entities: [BooksEntity],
+      entities: [BooksEntity, MedicineEntity],
       logger: 'advanced-console',
       logging: 'all',
       synchronize: true, //migration
     }),
     BooksModule,
+    MedicineModule,
   ],
   controllers: [AppController],
   providers: [AppService],

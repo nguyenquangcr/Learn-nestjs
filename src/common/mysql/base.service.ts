@@ -14,7 +14,7 @@ export class MysqlBaseService<Entity extends BaseEntity, Dto> {
   }
 
   async update(id: string, bookDto: Dto): Promise<{ result: string }> {
-    const updateResult = await this.repo.update(id, bookDto as any);
+    await this.repo.update(id, bookDto as any);
     return { result: 'success' };
   }
 
@@ -27,13 +27,14 @@ export class MysqlBaseService<Entity extends BaseEntity, Dto> {
     if (foundBooks === null) {
       return null;
     }
+
     return plainToInstance(BooksDto, foundBooks, {
       excludeExtraneousValues: true,
     });
   }
 
   async deleteById(id: string): Promise<{ result: string }> {
-    const deleteResult = await this.repo.softDelete(id);
+    await this.repo.softDelete(id);
     return { result: 'success' };
   }
 }
