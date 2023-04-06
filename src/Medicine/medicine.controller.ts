@@ -60,7 +60,11 @@ export class MedicineController {
       }
       await upload(this.medicineService);
       return result;
-    } else return this.medicineService.save(value);
+    } else
+      return this.medicineService.save({
+        ...value,
+        // note: JSON.stringify(test),
+      });
   }
 
   @Put(':id')

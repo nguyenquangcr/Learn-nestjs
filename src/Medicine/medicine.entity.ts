@@ -30,4 +30,7 @@ export class MedicineEntity extends BaseEntity {
 
   @Column({ default: null })
   nameImage: string;
+
+  @Column({ default: 0 })
+  quantity: number;
 }

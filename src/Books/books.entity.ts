@@ -2,24 +2,27 @@ import { BaseEntity } from 'src/common/mysql/base.entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity({
-  name: 'user',
+  name: 'order',
 })
-export class BooksEntity extends BaseEntity {
+export class OrderEntity extends BaseEntity {
   @Column({ length: 50 })
-  firstName: string;
+  name: string;
 
   @Column()
-  lastName: string;
+  email: string;
 
-  @Column({
-    default: false,
-  })
-  isActive: boolean;
+  @Column()
+  phoneNumber: string;
 
-  @Column({
-    type: 'enum',
-    enum: ['admin', 'group'],
-    default: 'admin',
-  })
-  role: string;
+  @Column()
+  note: string;
+
+  @Column()
+  address: string;
+
+  @Column()
+  order: string;
+
+  @Column()
+  price: number;
 }

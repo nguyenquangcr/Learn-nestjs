@@ -16,7 +16,7 @@ export class MedicineMysqlBaseService<Entity extends BaseEntity, Dto> {
   }
 
   async findOne(id: string): Promise<any> {
-    const foundMedicine = await this.repo.findOne({
+    const foundMedicine: any = await this.repo.findOne({
       where: {
         id: id as any,
       },
@@ -24,6 +24,8 @@ export class MedicineMysqlBaseService<Entity extends BaseEntity, Dto> {
     if (foundMedicine === null) {
       return null;
     }
+
+    // console.log('foundMedicine', JSON.parse(foundMedicine.note));
 
     return plainToInstance(MedicineDto, foundMedicine, {
       excludeExtraneousValues: true,

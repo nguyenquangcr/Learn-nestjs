@@ -7,34 +7,38 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { UserDto } from 'src/user.dto';
-import { BooksDto } from './books.dto';
-import { BooksService } from './books.service';
+import { OrderDro } from './books.dto';
+import { OrderService } from './books.service';
 
-@Controller('books')
-export class BooksController {
-  constructor(private readonly bookService: BooksService) {}
+@Controller('order')
+export class OrderController {
+  constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  createBooks(@Body() book): Promise<BooksDto> {
-    return this.bookService.save(book);
+  createOrder(@Body() order): Promise<OrderDro> {
+    return this.orderService.save(order);
   }
 
   @Put(':id')
   updateUserById(
     @Param('id') id: string,
-    @Body() book,
+    @Body() order,
   ): Promise<{ result: string }> {
-    return this.bookService.update(id, book);
+    return this.orderService.update(id, order);
+  }
+
+  @Get()
+  getAllMedicine() {
+    return this.orderService.findAll();
   }
 
   @Get(':id')
   getById(@Param('id') id: string) {
-    return this.bookService.findOne(id);
+    return this.orderService.findOne(id);
   }
 
   @Delete(':id')
   deleteUserById(@Param('id') id: string) {
-    return this.bookService.deleteById(id);
+    return this.orderService.deleteById(id);
   }
 }
