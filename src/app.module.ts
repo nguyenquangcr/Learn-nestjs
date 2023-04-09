@@ -42,7 +42,7 @@ const production: any = {
     // UsersModule,
     // PostsModule,
     // DataModule.forRoot(),
-    TypeOrmModule.forRoot(localHost),
+    TypeOrmModule.forRoot(production),
     UserModule,
     PostModule,
     BooksModule,
