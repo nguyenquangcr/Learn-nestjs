@@ -10,14 +10,14 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { MedicineDto } from './medicine.dto';
-import { MedicineService } from './medicine.service';
+import { PostDto } from './post.dto';
+import { MedicineService } from './post.service';
 import toStream = require('buffer-to-stream');
 import { v2 } from 'cloudinary';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Medicine')
-@Controller('medicine')
+@ApiTags('Post')
+@Controller('post')
 export class MedicineController {
   constructor(private readonly medicineService: MedicineService) {}
 
@@ -33,9 +33,9 @@ export class MedicineController {
 
   @Post('')
   @UseInterceptors(FileInterceptor('image'))
-  async uploadFile(@UploadedFile() file, @Body() value: MedicineDto) {
+  async uploadFile(@UploadedFile() file, @Body() value: PostDto) {
     if (file) {
-      let result: MedicineDto;
+      let result: PostDto;
       const streamUpload = (medicineService) => {
         return new Promise((resolve, reject) => {
           const stream = v2.uploader.upload_stream((error, result) => {
@@ -53,7 +53,7 @@ export class MedicineController {
             }
           });
           toStream(file?.buffer).pipe(stream);
-        }).then((res: MedicineDto) => {
+        }).then((res: PostDto) => {
           result = res;
         });
       };
@@ -95,7 +95,7 @@ export class MedicineController {
             }
           });
           toStream(file?.buffer).pipe(stream);
-        }).then((res: MedicineDto) => {
+        }).then((res: PostDto) => {
           result = res;
         });
       };

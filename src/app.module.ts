@@ -6,6 +6,10 @@ import { OrderEntity } from './Books/books.entity';
 import { BooksModule } from './Books/books.module';
 import { MedicineEntity } from './Medicine/medicine.entity';
 import { MedicineModule } from './Medicine/medicinemodule';
+import { PostEntity } from './Post/post.entity';
+import { PostModule } from './Post/postmodule';
+import { UserEntity } from './User/user.entity';
+import { UserModule } from './User/user.module';
 
 const localHost: any = {
   type: 'mysql',
@@ -14,7 +18,7 @@ const localHost: any = {
   username: 'root',
   password: '123456789',
   database: 'test',
-  entities: [OrderEntity, MedicineEntity],
+  entities: [UserEntity, PostEntity, OrderEntity, MedicineEntity],
   logger: 'advanced-console',
   logging: 'all',
   synchronize: true, //migration
@@ -27,7 +31,7 @@ const production: any = {
   username: 'bc232af21d8665',
   password: 'c1276d16',
   database: 'heroku_93b0415a4b35fde',
-  entities: [OrderEntity, MedicineEntity],
+  entities: [UserEntity, PostEntity, OrderEntity, MedicineEntity],
   logger: 'advanced-console',
   logging: 'all',
   synchronize: true, //migration
@@ -38,7 +42,9 @@ const production: any = {
     // UsersModule,
     // PostsModule,
     // DataModule.forRoot(),
-    TypeOrmModule.forRoot(production),
+    TypeOrmModule.forRoot(localHost),
+    UserModule,
+    PostModule,
     BooksModule,
     MedicineModule,
   ],
