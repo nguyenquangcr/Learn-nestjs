@@ -30,6 +30,9 @@ export class MedicineDto {
   @Expose()
   createAt;
 
+  @Expose()
+  tags;
+
   nameImage: string;
 
   quantity: number;
