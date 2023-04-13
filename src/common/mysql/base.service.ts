@@ -1,17 +1,17 @@
 import { plainToInstance } from 'class-transformer';
-import { OrderDro } from 'src/Books/books.dto';
+import { OrderDto } from 'src/Order/books.dto';
 import { Repository } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
 export class MysqlBaseService<Entity extends BaseEntity, Dto> {
   constructor(protected repo: Repository<Entity>) {}
 
-  async save(orderDto: OrderDro): Promise<any> {
+  async save(orderDto: OrderDto): Promise<any> {
     const formatOrder = { ...orderDto, order: JSON.stringify(orderDto?.order) };
 
     const saveOrder = await this.repo.save(formatOrder as any);
     return plainToInstance(
-      OrderDro,
+      OrderDto,
       { ...saveOrder, order: JSON.parse(saveOrder?.order) },
       {
         excludeExtraneousValues: true,
@@ -19,10 +19,18 @@ export class MysqlBaseService<Entity extends BaseEntity, Dto> {
     );
   }
 
-  async update(id: string, orderDto: OrderDro): Promise<{ result: string }> {
+  async update(id: number, orderDto: OrderDto): Promise<{ result: string }> {
     const formatOrder = { ...orderDto, order: JSON.stringify(orderDto?.order) };
     await this.repo.update(id, formatOrder as any);
     return { result: 'success' };
+  }
+
+  async updateStatus(
+    id: number,
+    body: { status: boolean },
+  ): Promise<{ result: string }> {
+    await this.repo.update(id, body as any);
+    return { result: 'Update status order success' };
   }
 
   async findAll(): Promise<any> {
@@ -46,7 +54,7 @@ export class MysqlBaseService<Entity extends BaseEntity, Dto> {
     }
 
     return plainToInstance(
-      OrderDro,
+      OrderDto,
       { ...foundOrder, order: JSON.parse(foundOrder?.order) },
       {
         excludeExtraneousValues: true,

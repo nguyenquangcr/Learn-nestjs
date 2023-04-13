@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 
-export class OrderDro {
+export class OrderDto {
   @Expose()
   id: string;
 
@@ -24,4 +24,10 @@ export class OrderDro {
 
   @Expose()
   price: number;
+
+  @Expose()
+  createAt;
+
+  @Expose()
+  status;
 }

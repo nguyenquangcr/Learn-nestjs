@@ -3,11 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { MysqlBaseService } from 'src/common/mysql/base.service';
 import { Repository } from 'typeorm';
-import { OrderDro } from './books.dto';
+import { OrderDto } from './books.dto';
 import { OrderEntity } from './books.entity';
 
 @Injectable()
-export class OrderService extends MysqlBaseService<OrderEntity, OrderDro> {
+export class OrderService extends MysqlBaseService<OrderEntity, OrderDto> {
   constructor(
     @InjectRepository(OrderEntity)
     private readonly booksRepository: Repository<OrderEntity>,

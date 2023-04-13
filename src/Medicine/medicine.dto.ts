@@ -27,6 +27,9 @@ export class MedicineDto {
   @Expose()
   price;
 
+  @Expose()
+  createAt;
+
   nameImage: string;
 
   quantity: number;

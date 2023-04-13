@@ -9,7 +9,6 @@ export class MedicineMysqlBaseService<Entity extends BaseEntity, Dto> {
 
   async findAll() {
     const listMedicine = await this.repo.find({});
-
     return plainToInstance(MedicineDto, listMedicine, {
       excludeExtraneousValues: true,
     });
@@ -24,9 +23,6 @@ export class MedicineMysqlBaseService<Entity extends BaseEntity, Dto> {
     if (foundMedicine === null) {
       return null;
     }
-
-    // console.log('foundMedicine', JSON.parse(foundMedicine.note));
-
     return plainToInstance(MedicineDto, foundMedicine, {
       excludeExtraneousValues: true,
     });

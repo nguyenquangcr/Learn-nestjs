@@ -25,4 +25,7 @@ export class OrderEntity extends BaseEntity {
 
   @Column()
   price: number;
+
+  @Column({ default: false })
+  status: boolean;
 }
