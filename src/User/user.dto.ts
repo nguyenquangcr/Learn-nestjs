@@ -1,36 +1,38 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { IsEmail, IsNotEmpty, Length, Matches } from 'class-validator';
+import { MESSAGES, REGEX } from 'src/app.utils';
 
 export class UserDto {
-  @ApiProperty({ description: 'User name', example: 'Peter Parker' })
-  @Expose()
+  @ApiProperty({
+    description: 'The name of the User',
+    example: 'Jhon Doe',
+  })
+  @IsNotEmpty()
   name: string;
 
   @ApiProperty({
-    description: 'User email address',
-    example: 'PeterParker@gmail.com',
+    description: 'The email address of the User',
+    example: 'jhon.doe@gmail.com',
   })
-  @Expose()
+  @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   @ApiProperty({
-    description: 'User phone number',
-    example: '0946806186',
+    description: 'The password of the User',
+    example: 'Password@123',
   })
-  @Expose()
-  phoneNumber: string;
+  @IsNotEmpty()
+  @Length(8, 24)
+  // @Matches(REGEX.PASSWORD_RULE, { message: MESSAGES.PASSWORD_RULE_MESSAGE })
+  password: string;
 
-  @ApiProperty({
-    description: 'User address',
-    example: 'District 1',
-  })
-  @Expose()
-  address: string;
-
-  @ApiProperty({
-    description: 'User role',
-    example: 'Member',
-  })
-  @Expose()
-  role: string;
+  // @ApiProperty({
+  //   description: 'Confirm the password',
+  //   example: 'Password@123',
+  // })
+  // @IsNotEmpty()
+  // @Length(8, 24)
+  // @Matches(REGEX.PASSWORD_RULE, { message: MESSAGES.PASSWORD_RULE_MESSAGE })
+  // confirm: string;
 }

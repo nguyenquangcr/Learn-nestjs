@@ -1,37 +1,53 @@
+import {
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { ApiProperty } from '@nestjs/swagger';
-import { BaseEntity } from 'src/common/mysql/base.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { UserRoles } from './enums/user.enum';
+import { BaseEntity } from 'src/common/mysql/base.entity';
 
-@Entity({
-  name: 'account',
-})
+@Entity({ name: 'users' })
 export class UserEntity extends BaseEntity {
-  @ApiProperty({ description: 'User name', example: 'Peter Parker' })
-  @Column({ length: 50 })
+  // @ApiProperty({ description: 'Primary key as User ID', example: 1 })
+  // @PrimaryGeneratedColumn()
+  // id: number;
+
+  @ApiProperty({ description: 'User name', example: 'Jhon Doe' })
+  @Column()
   name: string;
 
   @ApiProperty({
     description: 'User email address',
-    example: 'PeterParker@gmail.com',
+    example: 'jhon.doe@gmail.com',
   })
-  @Column({ unique: true })
+  @Column({
+    unique: true,
+  })
   email: string;
 
-  @ApiProperty({
-    description: 'User phone number',
-    example: '0946806186',
-  })
+  @ApiProperty({ description: 'Hashed user password' })
   @Column()
-  phoneNumber: string;
-
-  @ApiProperty({
-    description: 'User address',
-    example: 'District 1',
-  })
-  @Column()
-  address: string;
+  password: string;
 
   @Column({ type: 'enum', enum: UserRoles, default: UserRoles.MEMBER })
   role: UserRoles;
+
+  @ApiProperty({ description: 'When user was created' })
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @ApiProperty({ description: 'When user was updated' })
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @BeforeInsert()
+  async setPassword(password: string) {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(password || this.password, salt);
+  }
 }

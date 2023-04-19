@@ -3,9 +3,10 @@ import { BaseEntity } from 'src/common/mysql/base.entity';
 
 import { Repository } from 'typeorm';
 import { UserDto } from './user.dto';
+import { UserEntity } from './user.entity';
 
 export class UserMysqlBaseService<Entity extends BaseEntity, Dto> {
-  constructor(protected repo: Repository<Entity>) {}
+  constructor(protected repo: Repository<any>) {}
 
   async save(orderDto: any): Promise<any> {
     const formatOrder = orderDto;
@@ -32,23 +33,40 @@ export class UserMysqlBaseService<Entity extends BaseEntity, Dto> {
       });
   }
 
-  async findOne(id: string): Promise<any> {
-    const foundOrder: any = await this.repo.findOne({
-      where: {
-        id: id as any,
-      },
-    });
+  async findOne(id: number): Promise<any> {
+    // const foundOrder: any = await this.repo.findOne({
+    //   where: {
+    //     id: id as any,
+    //   },
+    // });
+    const foundOrder: any = await this.repo.findOneById(id);
+
     if (foundOrder === null) {
       return null;
     }
 
-    return plainToInstance(UserDto, foundOrder, {
-      excludeExtraneousValues: true,
-    });
+    return foundOrder;
   }
 
   async deleteById(id: string): Promise<{ result: string }> {
     await this.repo.delete(id);
     return { result: 'success' };
+  }
+
+  async doUserRegistration(userRegister: UserDto): Promise<UserEntity> {
+    const user = new UserEntity();
+    user.name = userRegister.name;
+    user.email = userRegister.email;
+    user.password = userRegister.password;
+
+    return await this.repo.save(user as any);
+  }
+
+  async getUserByEmail(email: any): Promise<UserEntity | undefined> {
+    return this.repo.findOne({ where: { email: email as any } });
+  }
+
+  async getUserById(id: number): Promise<UserEntity | undefined> {
+    return this.repo.findOne({ where: { id } });
   }
 }

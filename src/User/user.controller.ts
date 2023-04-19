@@ -7,8 +7,14 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { SETTINGS } from 'src/app.utils';
 import { UserDto } from './user.dto';
+import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 
 @ApiTags('User')
@@ -35,12 +41,27 @@ export class UserController {
   }
 
   @Get(':id')
-  getById(@Param('id') id: string) {
+  getById(@Param('id') id: number) {
+    console.log('id', id);
+
     return this.userService.findOne(id);
   }
 
   @Delete(':id')
   deleteUserById(@Param('id') id: string) {
     return this.userService.deleteById(id);
+  }
+
+  @Post('/register')
+  @ApiCreatedResponse({
+    description: 'Created user object as response',
+    type: UserEntity,
+  })
+  @ApiBadRequestResponse({ description: 'User cannot register. Try again!' })
+  async doUserRegistration(
+    @Body(SETTINGS.VALIDATION_PIPE)
+    userRegister: UserDto,
+  ): Promise<UserEntity> {
+    return await this.userService.doUserRegistration(userRegister);
   }
 }

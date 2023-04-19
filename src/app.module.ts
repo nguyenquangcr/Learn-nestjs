@@ -10,6 +10,7 @@ import { PostEntity } from './Post/post.entity';
 import { PostModule } from './Post/postmodule';
 import { UserEntity } from './User/user.entity';
 import { UserModule } from './User/user.module';
+import { AuthModule } from './Auth/auth.module';
 
 const localHost: any = {
   type: 'mysql',
@@ -39,14 +40,12 @@ const production: any = {
 
 @Module({
   imports: [
-    // UsersModule,
-    // PostsModule,
-    // DataModule.forRoot(),
     TypeOrmModule.forRoot(production),
     UserModule,
     PostModule,
     BooksModule,
     MedicineModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
