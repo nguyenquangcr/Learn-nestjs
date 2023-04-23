@@ -8,7 +8,16 @@ export class MedicineMysqlBaseService<Entity extends BaseEntity, Dto> {
   constructor(protected repo: Repository<Entity>) {}
 
   async findAll() {
-    const listMedicine = await this.repo.find({});
+    const listMedicine = await this.repo.find();
+
+    return plainToInstance(MedicineDto, listMedicine, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async findMedicineToQueryParam(take: number) {
+    const listMedicine = await this.repo.find({ take });
+
     return plainToInstance(MedicineDto, listMedicine, {
       excludeExtraneousValues: true,
     });

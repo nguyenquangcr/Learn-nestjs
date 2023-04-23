@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -24,6 +25,11 @@ export class MedicineController {
   @Get()
   getAllMedicine() {
     return this.medicineService.findAll();
+  }
+
+  @Get('getListToParams')
+  getMedicineToParam(@Query() query: { take: number }) {
+    return this.medicineService.findMedicineToQueryParam(query.take);
   }
 
   @Get(':id')
