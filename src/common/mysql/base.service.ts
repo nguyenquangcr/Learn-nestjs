@@ -37,10 +37,17 @@ export class MysqlBaseService<Entity extends BaseEntity, Dto> {
     const foundOrder = await this.repo.find();
     if (foundOrder === null) {
       return null;
-    } else
-      return foundOrder?.map((item: any) => {
-        return { ...item, order: JSON.parse(item?.order) };
+    } else {
+      const newFoundOrder = [];
+      foundOrder?.map((item: any) => {
+        if (item?.order)
+          return newFoundOrder.push({
+            ...item,
+            order: JSON.parse(item?.order),
+          });
       });
+      return newFoundOrder;
+    }
   }
 
   async findOne(id: string): Promise<any> {
