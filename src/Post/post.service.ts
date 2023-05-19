@@ -4,13 +4,10 @@ import { plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 import { PostDto } from './post.dto';
 import { PostEntity } from './post.entity';
-import { MedicineMysqlBaseService } from './postMysql.service';
+import { PostMysqlBaseService } from './postMysql.service';
 
 @Injectable()
-export class MedicineService extends MedicineMysqlBaseService<
-  PostEntity,
-  PostDto
-> {
+export class PostService extends PostMysqlBaseService<PostEntity, PostDto> {
   constructor(
     @InjectRepository(PostEntity)
     private readonly PostRepository: Repository<PostEntity>,

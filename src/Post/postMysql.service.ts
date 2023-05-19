@@ -1,70 +1,69 @@
 import { plainToInstance } from 'class-transformer';
+import { IsObject, isObject } from 'class-validator';
 import { v2 } from 'cloudinary';
 import { BaseEntity } from 'src/common/mysql/base.entity';
 import { Repository } from 'typeorm';
 import { PostDto } from './post.dto';
+import { Response } from 'express';
+import { BadRequestException } from '@nestjs/common';
+import { PostEntity } from './post.entity';
 
-export class MedicineMysqlBaseService<Entity extends BaseEntity, Dto> {
+export class PostMysqlBaseService<Entity extends PostEntity, PostDto> {
   constructor(protected repo: Repository<Entity>) {}
 
-  async findAll() {
-    const listPost = await this.repo.find({});
+  //Thêm bài viết
+  async save(PostDto: any, response: Response): Promise<any> {
+    const savePost = await this.repo.save(PostDto as any);
+    if (isObject(savePost)) {
+      return response.status(200).send('Thêm bài viết thành công');
+    }
+  }
+
+  //Phê duyệt bài viết
+  async update(id: string): Promise<{ result: string }> {
+    const Post: any = await this.repo.findOne({
+      where: {
+        id: id as any,
+      },
+    });
+    if (Post) {
+      const newPost = { ...Post, status: true };
+      await this.repo.update(id, newPost as any);
+      return { result: 'success' };
+    } else throw new BadRequestException();
+  }
+
+  //Tìm kiếm tất cả và tìm kiểu theo status
+  async findAll(query: { status: boolean }) {
+    let listPost = null;
+    if (query.status) {
+      listPost = await this.repo.find({
+        where: { status: true as any },
+      });
+    } else listPost = await this.repo.find();
 
     return plainToInstance(PostDto, listPost, {
       excludeExtraneousValues: true,
     });
   }
 
-  async findOne(id: string): Promise<any> {
-    const foundPost: any = await this.repo.findOne({
+  //Tìm kiếm theo id
+  async findOne(id: string) {
+    const post = this.repo.findOne({
       where: {
         id: id as any,
       },
     });
-    if (foundPost === null) {
-      return null;
-    }
 
-    return plainToInstance(PostDto, foundPost, {
-      excludeExtraneousValues: true,
-    });
-  }
-
-  async save(PostDto: any): Promise<any> {
-    const savePost = await this.repo.save(PostDto as any);
-    return plainToInstance(PostDto, savePost, {
-      excludeExtraneousValues: true,
-    });
-  }
-
-  async update(id: string, bookDto: any): Promise<{ result: string }> {
-    const { image, nameImage } = bookDto;
-
-    if (image && nameImage) {
-      const Post: any = await this.repo.findOne({
-        where: {
-          id: id as any,
-        },
+    if (post) {
+      return plainToInstance(PostDto, post, {
+        excludeExtraneousValues: true,
       });
-      if (Post?.nameImage != null) {
-        v2.uploader.destroy(Post?.nameImage);
-      }
-    }
-
-    await this.repo.update(id, bookDto as any);
-    return { result: 'success' };
+    } else throw BadRequestException;
   }
 
+  //Xoá bài viết
   async deleteById(id: string): Promise<{ result: string }> {
-    const Post: any = await this.repo.findOne({
-      where: {
-        id: id as any,
-      },
-    });
-    if (Post?.nameImage != null) {
-      v2.uploader.destroy(Post?.nameImage);
-    }
-
     await this.repo.delete(id);
     return { result: 'success' };
   }

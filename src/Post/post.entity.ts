@@ -5,26 +5,21 @@ import { Column, Entity } from 'typeorm';
   name: 'posts',
 })
 export class PostEntity extends BaseEntity {
-  @Column({ length: 50 })
-  name: string;
+  @Column({ default: '' })
+  title: string;
 
-  @Column()
+  @Column({ default: '' })
   description: string;
 
-  @Column({
-    default: '',
-  })
-  image: string;
+  @Column({ default: '' })
+  linkImage: string;
 
-  @Column({ length: 50 })
-  unit: string;
+  @Column({ default: '' })
+  content: string;
 
-  @Column({ length: 50 })
-  note: string;
+  @Column({ default: false })
+  status: boolean;
 
-  @Column({ default: 'post' })
+  @Column({ default: '' })
   tags: string;
-
-  @Column({ default: null })
-  nameImage: string;
 }

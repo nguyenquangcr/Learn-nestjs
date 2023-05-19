@@ -6,109 +6,49 @@ import {
   Param,
   Post,
   Put,
+  Query,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PostDto } from './post.dto';
-import { MedicineService } from './post.service';
+import { PostService } from './post.service';
 import toStream = require('buffer-to-stream');
 import { v2 } from 'cloudinary';
 import { ApiTags } from '@nestjs/swagger';
+import { query, Response } from 'express';
 
 @ApiTags('Post')
 @Controller('post')
-export class MedicineController {
-  constructor(private readonly medicineService: MedicineService) {}
+export class PostController {
+  constructor(private readonly postService: PostService) {}
 
-  @Get()
-  getAllMedicine() {
-    return this.medicineService.findAll();
-  }
-
-  @Get(':id')
-  getById(@Param('id') id: string) {
-    return this.medicineService.findOne(id);
-  }
-
-  @Post('')
-  @UseInterceptors(FileInterceptor('image'))
-  async uploadFile(@UploadedFile() file, @Body() value: PostDto) {
-    if (file) {
-      let result: PostDto;
-      const streamUpload = (medicineService) => {
-        return new Promise((resolve, reject) => {
-          const stream = v2.uploader.upload_stream((error, result) => {
-            if (result) {
-              const { secure_url, public_id } = result;
-              return resolve(
-                medicineService.save({
-                  ...value,
-                  image: secure_url,
-                  nameImage: public_id,
-                }),
-              );
-            } else {
-              return reject(error);
-            }
-          });
-          toStream(file?.buffer).pipe(stream);
-        }).then((res: PostDto) => {
-          result = res;
-        });
-      };
-      async function upload(medicineService) {
-        await streamUpload(medicineService);
-      }
-      await upload(this.medicineService);
-      return result;
-    } else
-      return this.medicineService.save({
-        ...value,
-        // note: JSON.stringify(test),
-      });
+  @Post()
+  CreatePost(
+    @Body() post: PostDto,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<any> {
+    return this.postService.save(post, response);
   }
 
   @Put(':id')
-  @UseInterceptors(FileInterceptor('image'))
-  async updateUserById(
-    @UploadedFile() file,
-    @Param('id') id: string,
-    @Body() medicine,
-  ): Promise<{ result: string }> {
-    if (file) {
-      let result: any;
-      const streamUpload = (medicineService) => {
-        return new Promise((resolve, reject) => {
-          const stream = v2.uploader.upload_stream((error, result) => {
-            if (result) {
-              const { secure_url, public_id } = result;
-              return resolve(
-                medicineService.update(id, {
-                  ...medicine,
-                  image: secure_url,
-                  nameImage: public_id,
-                }),
-              );
-            } else {
-              return reject(error);
-            }
-          });
-          toStream(file?.buffer).pipe(stream);
-        }).then((res: PostDto) => {
-          result = res;
-        });
-      };
-      async function upload(medicineService) {
-        await streamUpload(medicineService);
-      }
-      await upload(this.medicineService);
-      return result;
-    } else return this.medicineService.update(id, medicine);
+  UpdateStatusPost(@Param('id') id: string) {
+    return this.postService.update(id);
+  }
+
+  @Get()
+  GetListPost(@Query() query: { status: boolean }) {
+    return this.postService.findAll(query);
+  }
+
+  @Get(':id')
+  GetDetailPost(@Param('id') id: string) {
+    return this.postService.findOne(id);
   }
 
   @Delete(':id')
-  deleteUserById(@Param('id') id: string) {
-    return this.medicineService.deleteById(id);
+  DeletePost(@Param('id') id: string) {
+    return this.postService.deleteById(id);
   }
 }

@@ -6,46 +6,44 @@ export class PostDto {
   id: string;
 
   @ApiProperty({
-    description: 'this is name post',
-    example: 'Name post',
+    description: 'Title post',
+    example: 'itle post',
   })
   @Expose()
-  name;
+  title: string;
 
   @ApiProperty({
-    description: 'this is des post',
-    example: 'Des post',
+    description: 'Title post',
+    example: 'itle post',
   })
   @Expose()
-  description;
+  description: string;
 
   @ApiProperty({
-    description: 'this is image post',
-    example: 'image post',
+    description: 'Title post',
+    example: 'itle post',
   })
   @Expose()
-  image;
+  linkImage: string;
 
   @ApiProperty({
-    description: 'this is unit post',
-    example: 'unit post',
+    description: 'Title post',
+    example: 'itle post',
   })
   @Expose()
-  unit;
+  content: string;
 
   @ApiProperty({
-    description: 'this is note post',
-    example: 'note post',
+    description: 'Title post',
+    example: 'itle post',
   })
   @Expose()
-  note;
+  status: boolean;
 
   @ApiProperty({
-    description: 'this is tags post',
-    example: 'tags post',
+    description: 'Title post',
+    example: 'itle post',
   })
   @Expose()
-  tags;
-
-  nameImage: string;
+  tags: string;
 }
