@@ -25,16 +25,21 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post()
-  CreatePost(
-    @Body() post: PostDto,
-    @Res({ passthrough: true }) response: Response,
-  ): Promise<any> {
-    return this.postService.save(post, response);
+  CreatePost(@Body() post: PostDto): Promise<any> {
+    return this.postService.save(post);
   }
 
   @Put(':id')
-  UpdateStatusPost(@Param('id') id: string) {
-    return this.postService.update(id);
+  UpdateStatusPost(
+    @Param('id') id: string,
+    @Query() query: { status: boolean },
+  ) {
+    return this.postService.update(id, query);
+  }
+
+  @Put(':id/updateTag')
+  UpdateTagPost(@Param('id') id: string, @Query() query: { tag: string }) {
+    return this.postService.updateTag(id, query);
   }
 
   @Get()
