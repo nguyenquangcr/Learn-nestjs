@@ -13,10 +13,6 @@ import { BaseEntity } from 'src/common/mysql/base.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity {
-  // @ApiProperty({ description: 'Primary key as User ID', example: 1 })
-  // @PrimaryGeneratedColumn()
-  // id: number;
-
   @ApiProperty({ description: 'User name', example: 'Jhon Doe' })
   @Column()
   name: string;

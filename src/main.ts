@@ -17,8 +17,8 @@ async function bootstrap(): Promise<void> {
     .setVersion('1.0')
     .addTag('Post')
     .addTag('User')
-    .addTag('Medicine')
-    .addTag('Order')
+    .addTag('Tag')
+    .addTag('Auth')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

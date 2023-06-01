@@ -24,15 +24,5 @@ export class UserDto {
   })
   @IsNotEmpty()
   @Length(8, 24)
-  // @Matches(REGEX.PASSWORD_RULE, { message: MESSAGES.PASSWORD_RULE_MESSAGE })
   password: string;
-
-  // @ApiProperty({
-  //   description: 'Confirm the password',
-  //   example: 'Password@123',
-  // })
-  // @IsNotEmpty()
-  // @Length(8, 24)
-  // @Matches(REGEX.PASSWORD_RULE, { message: MESSAGES.PASSWORD_RULE_MESSAGE })
-  // confirm: string;
 }

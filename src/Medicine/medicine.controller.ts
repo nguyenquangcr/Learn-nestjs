@@ -17,7 +17,7 @@ import toStream = require('buffer-to-stream');
 import { v2 } from 'cloudinary';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Medicine')
+// @ApiTags('Medicine')
 @Controller('medicine')
 export class MedicineController {
   constructor(private readonly medicineService: MedicineService) {}

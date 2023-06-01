@@ -15,10 +15,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 import toStream = require('buffer-to-stream');
 import { v2 } from 'cloudinary';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { query, Response } from 'express';
 import { TagService } from './tag.service';
 import { TagDto } from './tag.dto';
+import { TimeDto } from './enums/time.enum';
 
 @ApiTags('Tag')
 @Controller('tag')
@@ -31,7 +32,7 @@ export class TagController {
   }
 
   @Post('/getList')
-  GetListPost(@Body() time: { startTime: string; endTime: string }) {
+  GetListPost(@Body() time: TimeDto) {
     return this.tagService.findAll(time);
   }
 }
