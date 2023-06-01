@@ -30,7 +30,7 @@ export class TagController {
     return this.tagService.save(tag);
   }
 
-  @Get()
+  @Post('/getList')
   GetListPost(@Body() time: { startTime: string; endTime: string }) {
     return this.tagService.findAll(time);
   }
