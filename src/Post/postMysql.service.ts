@@ -59,9 +59,10 @@ export class PostMysqlBaseService<Entity extends PostEntity, PostDto> {
       });
     } else listPost = await this.repo.find();
 
-    return plainToInstance(PostDto, listPost, {
-      excludeExtraneousValues: true,
-    });
+    return listPost;
+    // plainToInstance(PostDto, listPost, {
+    //   excludeExtraneousValues: true,
+    // });
   }
 
   //Tìm kiếm theo id
