@@ -35,6 +35,8 @@ export class UserController {
     return this.userService.update(id, user);
   }
 
+  //find center
+
   @Get()
   getAllMedicine() {
     return this.userService.findAll();
