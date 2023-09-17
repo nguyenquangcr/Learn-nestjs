@@ -31,9 +31,9 @@ const production: any = {
   type: 'mysql',
   host: 'us-cdbr-east-06.cleardb.net',
   port: 3306,
-  username: 'bc232af21d8665',
-  password: 'c1276d16',
-  database: 'heroku_93b0415a4b35fde',
+  username: 'bbffc39d66f3b1',
+  password: 'a1ea0c9e',
+  database: 'heroku_62aa8ec63df710d',
   entities: [UserEntity, PostEntity, OrderEntity, MedicineEntity, TagEntity],
   logger: 'advanced-console',
   logging: 'all',
@@ -42,7 +42,7 @@ const production: any = {
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(production),
+    TypeOrmModule.forRoot(localHost),
     TagModule,
     UserModule,
     PostModule,
