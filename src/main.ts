@@ -7,10 +7,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   app.use(cors());
-  app.useGlobalPipes(
-    new ValidationPipe(),
-    // {forbidUnknownValues: false}
-  );
+  app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle('Api swagger nestjs KLTN')
     .setDescription('This is docs api swagger detail project')
