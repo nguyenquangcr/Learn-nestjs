@@ -1,4 +1,4 @@
-import { BaseEntity } from 'src/common/mysql/base.entity';
+import { BaseEntity } from '../../src/common/mysql/base.entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity({
