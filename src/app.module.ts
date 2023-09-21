@@ -42,7 +42,7 @@ const production: any = {
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(localHost),
+    TypeOrmModule.forRoot(production),
     TagModule,
     UserModule,
     PostModule,
