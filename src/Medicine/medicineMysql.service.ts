@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { v2 } from 'cloudinary';
 import { BaseEntity } from 'src/common/mysql/base.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { MedicineDto } from './medicine.dto';
 
 export class MedicineMysqlBaseService<Entity extends BaseEntity, Dto> {
@@ -9,6 +9,16 @@ export class MedicineMysqlBaseService<Entity extends BaseEntity, Dto> {
 
   async findAll() {
     const listMedicine = await this.repo.find();
+
+    return plainToInstance(MedicineDto, listMedicine, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async findMedicineToSearch(keySearch: string) {
+    const listMedicine = await this.repo.find({
+      where: { name: Like(`%${keySearch ? keySearch : ''}%`) } as any,
+    });
 
     return plainToInstance(MedicineDto, listMedicine, {
       excludeExtraneousValues: true,

@@ -27,6 +27,11 @@ export class MedicineController {
     return this.medicineService.findAll();
   }
 
+  @Get('search')
+  getListMedicineToSearch(@Query() query: { search: string }) {
+    return this.medicineService.findMedicineToSearch(query.search);
+  }
+
   @Get('getListToParams')
   getMedicineToParam(@Query() query: { take: number }) {
     return this.medicineService.findMedicineToQueryParam(query.take);
