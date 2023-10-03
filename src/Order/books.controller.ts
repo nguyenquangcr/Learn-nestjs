@@ -6,7 +6,11 @@ import {
   Param,
   Post,
   Put,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/Auth/jwt-auth.guard';
+import ConverToken from 'src/Utils/ConverToken';
 import { OrderDto } from './books.dto';
 import { OrderService } from './books.service';
 
@@ -15,7 +19,9 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  createOrder(@Body() order): Promise<OrderDto> {
+  @UseGuards(JwtAuthGuard)
+  createOrder(@Body() order, @Req() request: Request): Promise<OrderDto> {
+    const token = ConverToken(request.headers);
     return this.orderService.save(order);
   }
 
