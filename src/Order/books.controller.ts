@@ -20,7 +20,7 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   createOrder(@Body() order, @Req() request: Request): Promise<OrderDto> {
     const token = ConverToken(request.headers);
     return this.orderService.save(order);
