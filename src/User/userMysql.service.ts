@@ -34,11 +34,6 @@ export class UserMysqlBaseService<Entity extends BaseEntity, Dto> {
   }
 
   async findOne(id: number): Promise<any> {
-    // const foundOrder: any = await this.repo.findOne({
-    //   where: {
-    //     id: id as any,
-    //   },
-    // });
     const foundOrder: any = await this.repo.findOneById(id);
 
     if (foundOrder === null) {
@@ -58,7 +53,7 @@ export class UserMysqlBaseService<Entity extends BaseEntity, Dto> {
     user.name = userRegister.name;
     user.email = userRegister.email;
     user.password = userRegister.password;
-
+    user.phoneNumber = userRegister.phoneNumber;
     return await this.repo.save(user as any);
   }
 

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -13,6 +13,7 @@ import { UserModule } from './User/user.module';
 import { AuthModule } from './Auth/auth.module';
 import { TagModule } from './Tag/postmodule';
 import { TagEntity } from './Tag/tag.entity';
+import { InternalErrorMiddleware } from './middlewares/internal-error.middleware';
 
 const localHost: any = {
   type: 'mysql',
@@ -24,7 +25,7 @@ const localHost: any = {
   entities: [UserEntity, PostEntity, OrderEntity, MedicineEntity, TagEntity],
   logger: 'advanced-console',
   logging: 'all',
-  synchronize: true, //migration
+  synchronize: false, //migration
   charset: 'utf8mb4',
 };
 
@@ -43,7 +44,7 @@ const production: any = {
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(production),
+    TypeOrmModule.forRoot(localHost),
     TagModule,
     UserModule,
     PostModule,
@@ -54,4 +55,8 @@ const production: any = {
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(InternalErrorMiddleware).forRoutes('*');
+  }
+}
