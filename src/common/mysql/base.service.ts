@@ -40,11 +40,17 @@ export class MysqlBaseService<Entity extends BaseEntity, Dto> {
     } else {
       const newFoundOrder = [];
       foundOrder?.map((item: any) => {
-        if (item?.order)
-          return newFoundOrder.push({
-            ...item,
-            order: JSON.parse(item?.order),
-          });
+        if (item?.order) {
+          try {
+            const parsedOrder = JSON.parse(item?.order);
+            newFoundOrder.push({
+              ...item,
+              order: parsedOrder,
+            });
+          } catch (error) {
+            console.log('Invalid JSON:', error);
+          }
+        }
       });
       return newFoundOrder;
     }
