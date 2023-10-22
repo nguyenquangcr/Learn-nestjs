@@ -42,7 +42,7 @@ export class MysqlBaseService<Entity extends BaseEntity, Dto> {
       foundOrder?.map((item: any) => {
         if (item?.order) {
           try {
-            const parsedOrder = JSON.parse(item?.order);
+            const parsedOrder = JSON.parse(item?.order.replace(/\//g, '-'));
             newFoundOrder.push({
               ...item,
               order: parsedOrder,
