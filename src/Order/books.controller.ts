@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import ConverToken from 'src/Utils/ConverToken';
 import { OrderDto } from './books.dto';
 import { OrderService } from './books.service';
 import { Request } from 'express';
+import { TimeDto } from 'src/Tag/enums/time.enum';
 
 @Controller('order')
 export class OrderController {
@@ -43,8 +45,11 @@ export class OrderController {
   }
 
   @Get()
-  getAllMedicine() {
-    return this.orderService.findAll();
+  getAllMedicine(
+    @Query('startDay') startDay: string,
+    @Query('endDay') endDay: string,
+  ) {
+    return this.orderService.findAll({ startDay: startDay, endDay: endDay });
   }
 
   @Get(':id')

@@ -1,6 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { OrderDto } from 'src/Order/books.dto';
-import { Repository } from 'typeorm';
+import { TimeDto } from 'src/Tag/enums/time.enum';
+import { Between, Repository } from 'typeorm';
 import { BaseEntity } from './base.entity';
 
 export class MysqlBaseService<Entity extends BaseEntity, Dto> {
@@ -33,13 +34,23 @@ export class MysqlBaseService<Entity extends BaseEntity, Dto> {
     return { result: 'Update status order success' };
   }
 
-  async findAll(): Promise<any> {
-    const foundOrder = await this.repo.find();
-    if (foundOrder === null) {
+  async findAll(time: { startDay: string; endDay: string }): Promise<any> {
+    let listOrder = [];
+    if (time.startDay && time.endDay) {
+      listOrder = await this.repo.find({
+        where: {
+          createAt: Between(time.startDay, time.endDay) as any,
+        },
+      });
+    } else {
+      listOrder = await this.repo.find();
+    }
+
+    if (listOrder === null) {
       return null;
     } else {
       const newFoundOrder = [];
-      foundOrder?.map((item: any) => {
+      listOrder?.map((item: any) => {
         if (item?.order) {
           try {
             const parsedOrder = JSON.parse(item?.order.replace(/\//g, '-'));
