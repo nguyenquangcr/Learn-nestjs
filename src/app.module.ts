@@ -14,13 +14,14 @@ import { AuthModule } from './Auth/auth.module';
 import { TagModule } from './Tag/postmodule';
 import { TagEntity } from './Tag/tag.entity';
 import { InternalErrorMiddleware } from './middlewares/internal-error.middleware';
+import { TelegramModule } from './Telegram/telegram.module';
 
 const localHost: any = {
   type: 'mysql',
   host: 'localhost',
   port: 3306,
   username: 'root',
-  password: '123456789', //123456789
+  password: '', //123456789
   database: 'test',
   entities: [UserEntity, PostEntity, OrderEntity, MedicineEntity, TagEntity],
   logger: 'advanced-console',
@@ -52,6 +53,7 @@ const production: any = {
     BooksModule,
     MedicineModule,
     AuthModule,
+    TelegramModule,
   ],
   controllers: [AppController],
   providers: [AppService],
