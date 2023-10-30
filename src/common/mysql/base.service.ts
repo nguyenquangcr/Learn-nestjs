@@ -3,21 +3,49 @@ import { OrderDto } from 'src/Order/books.dto';
 import { TimeDto } from 'src/Tag/enums/time.enum';
 import { Between, Repository } from 'typeorm';
 import { BaseEntity } from './base.entity';
+import { TelegramService } from 'src/Telegram/telegram.service';
+import { userOrGroupIdTelegram } from 'src/config/telegram.constants';
+import ConvertDay from 'src/Utils/ConverDate';
 
 export class MysqlBaseService<Entity extends BaseEntity, Dto> {
-  constructor(protected repo: Repository<Entity>) {}
+  constructor(
+    protected repo: Repository<Entity>,
+    public telegramService: TelegramService,
+  ) {}
 
   async save(orderDto: OrderDto): Promise<any> {
     const formatOrder = { ...orderDto, order: JSON.stringify(orderDto?.order) };
 
     const saveOrder = await this.repo.save(formatOrder as any);
-    return plainToInstance(
+
+    const formatData = plainToInstance(
       OrderDto,
       { ...saveOrder, order: JSON.parse(saveOrder?.order) },
       {
         excludeExtraneousValues: true,
       },
     );
+
+    this.telegramService.sendMessageToUser(
+      userOrGroupIdTelegram,
+      `
+      (Tin nhắn tự động) Xin chào,
+      Chúng tôi thông báo rằng bạn nhận được đơn hàng mới:
+      - Mã đơn hàng: ${formatData.id}
+      - Khách hàng: ${formatData.name}
+      - Số điện thoại: ${formatData.phoneNumber}
+      - Địa chỉ giao hàng: ${formatData.address}
+      - Thời gian: ${ConvertDay(formatData.createAt)}
+      
+      Vui lòng kiểm tra đơn hàng mới và xử lý nó theo quy trình của bạn. Nếu có bất kỳ câu hỏi nào từ phía khách hàng, hãy sẵn lòng trả lời và cung cấp hỗ trợ cho họ.
+      
+      Xin cảm ơn!
+      
+      Trân trọng,
+      Đội ngũ hỗ trợ của bạn
+    `,
+    );
+    return formatData;
   }
 
   async update(id: number, orderDto: OrderDto): Promise<{ result: string }> {

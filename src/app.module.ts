@@ -21,7 +21,7 @@ const localHost: any = {
   host: 'localhost',
   port: 3306,
   username: 'root',
-  password: '', //123456789
+  password: '123456789', //123456789
   database: 'test',
   entities: [UserEntity, PostEntity, OrderEntity, MedicineEntity, TagEntity],
   logger: 'advanced-console',

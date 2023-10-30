@@ -11,9 +11,9 @@ export class TelegramService {
   constructor() {
     this.bot = new TelegramBot(TELEGRAM_TOKEN, {
       polling: true,
-      request: {
-        proxy: domainProxyFpt,
-      },
+      // request: {
+      //   proxy: domainProxyFpt,
+      // },
     });
 
     this.bot.on('message', this.onReceiveMessage);
