@@ -28,21 +28,12 @@ export class MysqlBaseService<Entity extends BaseEntity, Dto> {
 
     this.telegramService.sendMessageToUser(
       userOrGroupIdTelegram,
-      `
-      (Tin nhắn tự động) Xin chào,
-      Chúng tôi thông báo rằng bạn nhận được đơn hàng mới:
+      ` (Tin nhắn tự động) Xin chào, Chúng tôi thông báo rằng bạn nhận được đơn hàng mới:
       - Mã đơn hàng: ${formatData.id}
       - Khách hàng: ${formatData.name}
       - Số điện thoại: ${formatData.phoneNumber}
       - Địa chỉ giao hàng: ${formatData.address}
       - Thời gian: ${ConvertDay(formatData.createAt)}
-      
-      Vui lòng kiểm tra đơn hàng mới và xử lý nó theo quy trình của bạn. Nếu có bất kỳ câu hỏi nào từ phía khách hàng, hãy sẵn lòng trả lời và cung cấp hỗ trợ cho họ.
-      
-      Xin cảm ơn!
-      
-      Trân trọng,
-      Đội ngũ hỗ trợ của bạn
     `,
     );
     return formatData;
