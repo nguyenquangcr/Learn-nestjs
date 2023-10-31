@@ -35,6 +35,7 @@ export class MysqlBaseService<Entity extends BaseEntity, Dto> {
       - Địa chỉ giao hàng: ${formatData.address}
       - Thời gian: ${ConvertDay(formatData.createAt)}
       - Ghi chú: ${formatData.note}
+      ---------------------------------------//-------------------------------------------
     `,
     );
     return formatData;
